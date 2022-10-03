@@ -30,6 +30,6 @@ Cockpit ile görüntüleyebiliyor execute edebiliyoruz.
 
 Tomcat ile Webapp klasörü altında defaul olarak bir kaç uygulama ekli geliyor. Burada yine default olarak Engine'in kullandığı H2 database gibi bir kaç yararlı uygulamayı deploy ederek geliyor..
 Yukarıdaki TomcatPA uygulamamızı webbapp klasörüne war dosyası olarak ekliyoruz. bu war dosyası bizim için her hangi bir process i temsil ediyor. 
-bpm-platform.xml dosyasında ise (Server/conf/bpm-platform.xml) Engine için veya Job Executer için gerekli yapılandırmaları yapıyoruz.
+bpm-platform.xml dosyasında ise (Server/conf/bpm-platform.xml) Engine için veya Job Executer için gerekli yapılandırmaları yapıyoruz. TomcatPluginJar (ParseListener.jar) dosyalarımızı, Lib klasörü altında Enginin kullanabilmesi için sunuyoruz. ancak plugin olarak geçeceğimiz classlarımız Engine tarafından tanınması için bazı sınıfları veye interfaceleri implement etmesi gerekiyor. Bu dosyalar TomcatPluginJar (4) mevcuttur.
 
 
