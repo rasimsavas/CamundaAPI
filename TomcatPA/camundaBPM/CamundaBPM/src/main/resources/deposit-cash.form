@@ -1,0 +1,24 @@
+{
+  "components": [
+    {
+      "label": "Deposit",
+      "type": "number",
+      "id": "Field_1rce8zs",
+      "key": "depositCash",
+      "description": "Deposit Cash",
+      "validate": {
+        "min": 0,
+        "max": 3000
+      }
+    }
+  ],
+  "type": "default",
+  "id": "deposit-formID",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.2.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}

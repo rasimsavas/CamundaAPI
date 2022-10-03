@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<process-application
+        xmlns="http://www.camunda.org/schema/1.0/ProcessApplication"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <process-archive name="proc-atm">
+    <process-engine>default</process-engine>
+    
+    <resource>proc-atm.bpmn</resource>
+    <resource>get-amount.form</resource>
+    <resource>atm-login.form</resource>
+    <resource>deposit-cash.form</resource>
+    
+    <properties>
+      <property name="isDeleteUponUndeploy">false</property>
+      <property name="isScanForProcessDefinitions">true</property>
+    </properties>
+  </process-archive>
+
+  <process-archive name="proc-atm2">
+    <process-engine>default2</process-engine>
+    
+    <resource>proc-atm.bpmn</resource>
+    <resource>get-amount.form</resource>
+    <resource>atm-login.form</resource>
+    
+    <properties>
+      <property name="isDeleteUponUndeploy">false</property>
+      <property name="isScanForProcessDefinitions">true</property>
+    </properties>
+  </process-archive>
+
+</process-application>

@@ -1,0 +1,45 @@
+{
+  "components": [
+    {
+      "label": "TCNO",
+      "type": "number",
+      "id": "Field_0soongt",
+      "key": "KEYINPUTTC",
+      "description": "KIMLIK NO",
+      "validate": {
+        "min": 1,
+        "max": 99999999999,
+        "required": true
+      }
+    },
+    {
+      "label": "PASSWORD",
+      "type": "textfield",
+      "id": "Field_0y22hqg",
+      "key": "KEYINPUTPASS",
+      "description": "Password Field",
+      "validate": {
+        "minLength": 3,
+        "maxLength": 16,
+        "required": true
+      },
+      "disabled": false
+    },
+    {
+      "action": "submit",
+      "label": "KAYIT OL",
+      "type": "button",
+      "id": "Field_0e2yaq0",
+      "key": "field_08alatw"
+    }
+  ],
+  "type": "default",
+  "id": "GIRISFORMID",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.2.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}

@@ -1,0 +1,20 @@
+{
+  "components": [
+    {
+      "label": "Cekilecek miktar",
+      "type": "number",
+      "id": "Field_1uat92w",
+      "key": "amount",
+      "description": "amount Field"
+    }
+  ],
+  "type": "default",
+  "id": "amountForm",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.2.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.17.0",
+  "schemaVersion": 4
+}

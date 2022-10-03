@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_06wh8ly" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.2.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:message id="Message_0hmcl0u" name="atmstart" />
+  <bpmn:process id="ATMKEY" name="Atm" isExecutable="true">
+    <bpmn:extensionElements />
+    <bpmn:exclusiveGateway id="Gateway_0jat881">
+      <bpmn:incoming>Flow_00nynx6</bpmn:incoming>
+      <bpmn:outgoing>Flow_09onznw</bpmn:outgoing>
+      <bpmn:outgoing>Flow_009360m</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="validate" name="Validation" camunda:class="org.camunda.bpm.getstarted.loanapproval.UserValidate">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="UserValidate" value="false" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09i3itt</bpmn:incoming>
+      <bpmn:outgoing>Flow_00nynx6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="UserTaskGirisID" name="Login" camunda:formRef="GIRISFORMID" camunda:formRefBinding="latest">
+      <bpmn:extensionElements>
+        <camunda:taskListener class="org.camunda.bpm.getstarted.loanapproval.tasklisteners" event="complete" id="rasim29" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_009360m</bpmn:incoming>
+      <bpmn:incoming>Flow_1y5iwsh</bpmn:incoming>
+      <bpmn:incoming>Flow_1xga5vj</bpmn:incoming>
+      <bpmn:outgoing>Flow_09i3itt</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_09onznw" name="Kullanici Adi Dogru ise" sourceRef="Gateway_0jat881" targetRef="waitprocessID">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${UserValidate==true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_009360m" name="Kullanici Adi Yanlis ise" sourceRef="Gateway_0jat881" targetRef="UserTaskGirisID">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${UserValidate==false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1y5iwsh" sourceRef="atmstartID" targetRef="UserTaskGirisID" />
+    <bpmn:sequenceFlow id="Flow_09i3itt" sourceRef="UserTaskGirisID" targetRef="validate" />
+    <bpmn:sequenceFlow id="Flow_00nynx6" sourceRef="validate" targetRef="Gateway_0jat881" />
+    <bpmn:startEvent id="atmstartID">
+      <bpmn:outgoing>Flow_1y5iwsh</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0t8f0oo" messageRef="Message_0hmcl0u" />
+    </bpmn:startEvent>
+    <bpmn:eventBasedGateway id="waitprocessID" name="wait Process">
+      <bpmn:incoming>Flow_09onznw</bpmn:incoming>
+      <bpmn:incoming>Flow_043ond8</bpmn:incoming>
+      <bpmn:outgoing>Flow_1x4b77a</bpmn:outgoing>
+      <bpmn:outgoing>Flow_03wrade</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0lzrc4g</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:subProcess id="withdrawmoneysubID" name="withdraw Money">
+      <bpmn:incoming>Flow_1imetst</bpmn:incoming>
+      <bpmn:endEvent id="Event_0p7q5ws">
+        <bpmn:incoming>Flow_0wqxoy1</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:serviceTask id="accountcheckID" name="Account Check" camunda:class="org.camunda.bpm.getstarted.loanapproval.AmountCheck">
+        <bpmn:extensionElements>
+          <camunda:properties>
+            <camunda:property name="AmountCheck" value="false" />
+          </camunda:properties>
+          <camunda:executionListener class="org.camunda.bpm.getstarted.loanapproval.AmountCheck" event="start" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1jwlcr0</bpmn:incoming>
+        <bpmn:outgoing>Flow_1pqxh38</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:exclusiveGateway id="Gateway_1aduv2s">
+        <bpmn:incoming>Flow_1pqxh38</bpmn:incoming>
+        <bpmn:outgoing>Flow_0wqxoy1</bpmn:outgoing>
+        <bpmn:outgoing>Flow_0t9b5m4</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:userTask id="cashID" name="Cash" camunda:formRef="amountForm" camunda:formRefBinding="latest">
+        <bpmn:incoming>Flow_0t9b5m4</bpmn:incoming>
+        <bpmn:incoming>Flow_1bejjfe</bpmn:incoming>
+        <bpmn:outgoing>Flow_1jwlcr0</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:sequenceFlow id="Flow_0wqxoy1" sourceRef="Gateway_1aduv2s" targetRef="Event_0p7q5ws">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${AmountCheck==true}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_1jwlcr0" sourceRef="cashID" targetRef="accountcheckID" />
+      <bpmn:sequenceFlow id="Flow_1pqxh38" sourceRef="accountcheckID" targetRef="Gateway_1aduv2s" />
+      <bpmn:sequenceFlow id="Flow_0t9b5m4" sourceRef="Gateway_1aduv2s" targetRef="cashID">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${AmountCheck==false}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:startEvent id="Event_04216ia">
+        <bpmn:outgoing>Flow_1bejjfe</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_1bejjfe" sourceRef="Event_04216ia" targetRef="cashID" />
+    </bpmn:subProcess>
+    <bpmn:intermediateCatchEvent id="withdrawmoneymessageID" name="withdraw money">
+      <bpmn:incoming>Flow_1x4b77a</bpmn:incoming>
+      <bpmn:outgoing>Flow_1imetst</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_04jpebv" messageRef="Message_133fgnu" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1x4b77a" sourceRef="waitprocessID" targetRef="withdrawmoneymessageID" />
+    <bpmn:sequenceFlow id="Flow_1imetst" sourceRef="withdrawmoneymessageID" targetRef="withdrawmoneysubID" />
+    <bpmn:intermediateCatchEvent id="sesionrestartID">
+      <bpmn:incoming>Flow_03wrade</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xga5vj</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0n4ec5n">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1H30M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_03wrade" sourceRef="waitprocessID" targetRef="sesionrestartID" />
+    <bpmn:sequenceFlow id="Flow_1xga5vj" sourceRef="sesionrestartID" targetRef="UserTaskGirisID" />
+    <bpmn:subProcess id="depositsubID" name="deposit">
+      <bpmn:incoming>Flow_19roc0k</bpmn:incoming>
+      <bpmn:sequenceFlow id="Flow_0rqz9di" sourceRef="depositTaskID" targetRef="Event_0okbgj6" />
+      <bpmn:sequenceFlow id="Flow_1f9mntt" sourceRef="Event_0kms8ea" targetRef="depositTaskID" />
+      <bpmn:userTask id="depositTaskID" name="depositTask" camunda:formRef="deposit-formID" camunda:formRefBinding="latest">
+        <bpmn:extensionElements>
+          <camunda:executionListener class="org.camunda.bpm.getstarted.loanapproval.ProcessRequestDelegate" event="end" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1f9mntt</bpmn:incoming>
+        <bpmn:outgoing>Flow_0rqz9di</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:endEvent id="Event_0okbgj6">
+        <bpmn:incoming>Flow_0rqz9di</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:startEvent id="Event_0kms8ea">
+        <bpmn:outgoing>Flow_1f9mntt</bpmn:outgoing>
+      </bpmn:startEvent>
+    </bpmn:subProcess>
+    <bpmn:intermediateCatchEvent id="depositmessageID" name="deposit">
+      <bpmn:incoming>Flow_0lzrc4g</bpmn:incoming>
+      <bpmn:outgoing>Flow_19roc0k</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0a90umg" messageRef="Message_1t8luob" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0lzrc4g" sourceRef="waitprocessID" targetRef="depositmessageID" />
+    <bpmn:sequenceFlow id="Flow_19roc0k" sourceRef="depositmessageID" targetRef="depositsubID" />
+    <bpmn:boundaryEvent id="depositThrowID" attachedToRef="depositsubID">
+      <bpmn:outgoing>Flow_043ond8</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0axkik2" errorRef="Error_0uh7uy7" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_043ond8" sourceRef="depositThrowID" targetRef="waitprocessID" />
+  </bpmn:process>
+  <bpmn:message id="Message_133fgnu" name="withdrawmoneyMessage" />
+  <bpmn:message id="Message_1t8luob" name="depositMessage" />
+  <bpmn:error id="Error_0uh7uy7" name="depositError" errorCode="codeDeposit" camunda:errorMessage="depositError" />
+  <bpmn:message id="Message_21gtv9q" name="newdepositMessage" />
+  <bpmn:message id="Message_0u09n6g" name="deneme1" />
+  <bpmn:message id="Message_14ooja1" name="deneme2" />
+  <bpmn:escalation id="Escalation_3cchfsk" name="Escalation_3cchfsk" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ATMKEY">
+      <bpmndi:BPMNEdge id="Flow_19roc0k_di" bpmnElement="Flow_19roc0k">
+        <di:waypoint x="650" y="448" />
+        <di:waypoint x="650" y="555" />
+        <di:waypoint x="680" y="555" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lzrc4g_di" bpmnElement="Flow_0lzrc4g">
+        <di:waypoint x="650" y="375" />
+        <di:waypoint x="650" y="412" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xga5vj_di" bpmnElement="Flow_1xga5vj">
+        <di:waypoint x="462" y="240" />
+        <di:waypoint x="320" y="240" />
+        <di:waypoint x="320" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03wrade_di" bpmnElement="Flow_03wrade">
+        <di:waypoint x="650" y="325" />
+        <di:waypoint x="650" y="240" />
+        <di:waypoint x="498" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1imetst_di" bpmnElement="Flow_1imetst">
+        <di:waypoint x="768" y="350" />
+        <di:waypoint x="850" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1x4b77a_di" bpmnElement="Flow_1x4b77a">
+        <di:waypoint x="675" y="350" />
+        <di:waypoint x="732" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00nynx6_di" bpmnElement="Flow_00nynx6">
+        <di:waypoint x="470" y="350" />
+        <di:waypoint x="525" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09i3itt_di" bpmnElement="Flow_09i3itt">
+        <di:waypoint x="280" y="390" />
+        <di:waypoint x="280" y="440" />
+        <di:waypoint x="420" y="440" />
+        <di:waypoint x="420" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1y5iwsh_di" bpmnElement="Flow_1y5iwsh">
+        <di:waypoint x="188" y="350" />
+        <di:waypoint x="230" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_1324rbq" bpmnElement="Flow_009360m">
+        <di:waypoint x="550" y="325" />
+        <di:waypoint x="550" y="280" />
+        <di:waypoint x="280" y="280" />
+        <di:waypoint x="280" y="310" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="380" y="246" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_13ti4nc" bpmnElement="Flow_09onznw">
+        <di:waypoint x="575" y="350" />
+        <di:waypoint x="625" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="570" y="316" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_043ond8_di" bpmnElement="Flow_043ond8">
+        <di:waypoint x="806" y="460" />
+        <di:waypoint x="665" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BPMNShape_14sfzx8" bpmnElement="Gateway_0jat881" isMarkerVisible="true">
+        <dc:Bounds x="525" y="325" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1m9i96x" bpmnElement="validate">
+        <dc:Bounds x="370" y="310" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_10108m2" bpmnElement="UserTaskGirisID">
+        <dc:Bounds x="230" y="310" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1alawtb_di" bpmnElement="atmstartID">
+        <dc:Bounds x="152" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1kz3o2e_di" bpmnElement="waitprocessID">
+        <dc:Bounds x="625" y="325" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="620" y="382" width="62" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_02pdqiq_di" bpmnElement="withdrawmoneymessageID">
+        <dc:Bounds x="732" y="332" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="711" y="375" width="79" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1wr35co_di" bpmnElement="sesionrestartID">
+        <dc:Bounds x="462" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ftvcbi_di" bpmnElement="depositmessageID">
+        <dc:Bounds x="632" y="412" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="559" y="420" width="37" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0q7swa5_di" bpmnElement="depositsubID" isExpanded="true">
+        <dc:Bounds x="680" y="470" width="400" height="230" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1f9mntt_di" bpmnElement="Flow_1f9mntt">
+        <di:waypoint x="743" y="584" />
+        <di:waypoint x="770" y="584" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rqz9di_di" bpmnElement="Flow_0rqz9di">
+        <di:waypoint x="870" y="584" />
+        <di:waypoint x="972" y="584" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_12ktlso_di" bpmnElement="Event_0okbgj6">
+        <dc:Bounds x="972" y="566" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_14zj8wl_di" bpmnElement="Event_0kms8ea">
+        <dc:Bounds x="707" y="566" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1e160ly_di" bpmnElement="depositTaskID">
+        <dc:Bounds x="770" y="544" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gdb8cw_di" bpmnElement="withdrawmoneysubID" isExpanded="true">
+        <dc:Bounds x="850" y="80" width="520" height="320" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1bejjfe_di" bpmnElement="Flow_1bejjfe">
+        <di:waypoint x="912" y="146" />
+        <di:waypoint x="964" y="146" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_11vum2f" bpmnElement="Flow_0t9b5m4">
+        <di:waypoint x="1024" y="231" />
+        <di:waypoint x="1024" y="186" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_03p01t5" bpmnElement="Flow_1pqxh38">
+        <di:waypoint x="1174" y="186" />
+        <di:waypoint x="1174" y="256" />
+        <di:waypoint x="1049" y="256" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0xsb76a" bpmnElement="Flow_1jwlcr0">
+        <di:waypoint x="1064" y="126" />
+        <di:waypoint x="1124" y="126" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_1hcpxad" bpmnElement="Flow_0wqxoy1">
+        <di:waypoint x="1024" y="281" />
+        <di:waypoint x="1024" y="338" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="308" y="326" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BPMNShape_0ehz5hk" bpmnElement="Event_0p7q5ws">
+        <dc:Bounds x="1006" y="338" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1mpfu9m" bpmnElement="accountcheckID">
+        <dc:Bounds x="1124" y="106" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_13xvpoa" bpmnElement="Gateway_1aduv2s" isMarkerVisible="true">
+        <dc:Bounds x="999" y="231" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0vkd647" bpmnElement="cashID">
+        <dc:Bounds x="964" y="106" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_04216ia_di" bpmnElement="Event_04216ia">
+        <dc:Bounds x="876" y="128" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_027pvhp_di" bpmnElement="depositThrowID">
+        <dc:Bounds x="802" y="452" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
