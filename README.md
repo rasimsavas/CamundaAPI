@@ -1,5 +1,7 @@
 # CamundaAPI
 
+## TomcatDeployment dosyası indirilerek "start.bat" ile sunucu ve tasarlanan process kullanılabilir. Process içinde camundanın komponentleri (serviceTask, userTask, messageEvent vb) kullarak basit bir Atm uygulaması oluşturuldu. 
+
 ### 1)    CamundaDOTNET: 
 Java tarafindan Engine ile elde ettigimiz bazi datalari dotnet tarafina aktarip database vb gibi sorgulamalari veya log kayitlarini tasiyoruz..
 
